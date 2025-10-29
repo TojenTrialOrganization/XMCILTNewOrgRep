@@ -28,13 +28,14 @@ jobs:
           version: latest
 
       - name: Validate pnpm install
-        working-directory: ./apps/website
+        working-directory: ./headapps/nextjs-starter
         run: |
           pnpm install
 
       - name: Validate pnpm build
-        working-directory: ./apps/website
+        working-directory: ./headapps/nextjs-starter
         run: pnpm run build
+
 
 
 
