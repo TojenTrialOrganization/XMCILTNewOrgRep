@@ -20,25 +20,20 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18" # Consider downgrading from 22 if compatibility issues arise
+          node-version: "18" # Use Node 18 for compatibility with Sitecore JSS SDK
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: latest
 
-      - name: Set environment variables
-        run: |
-          echo "SITECORE_API_KEY=your-api-key" >> $GITHUB_ENV
-          echo "SITECORE_API_HOST=https://your-sitecore-host" >> $GITHUB_ENV
-          echo "GRAPHQL_ENDPOINT=https://your-sitecore-host/api/graphql" >> $GITHUB_ENV
-          echo "SITECORE_JSS_APP_NAME=nextjs-starter" >> $GITHUB_ENV
-          echo "SITECORE_DEFAULT_LANGUAGE=en" >> $GITHUB_ENV
-          echo "SITECORE_ENABLE_DEBUG=true" >> $GITHUB_ENV
-
       - name: Install dependencies
         working-directory: ./headapps/nextjs-starter
         run: pnpm install
+
+      - name: Ensure .env is loaded
+        working-directory: ./headapps/nextjs-starter
+        run: cp .env .env.local
 
       - name: Build project
         working-directory: ./headapps/nextjs-starter
