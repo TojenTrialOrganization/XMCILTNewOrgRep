@@ -1,5 +1,5 @@
 # Sitecore JSS Next.js Sample Application
-
+#Add actions for this project
 <!---
 @TODO: Update to next version docs before release
 -->
