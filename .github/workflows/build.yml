@@ -65,7 +65,7 @@ jobs:
        with:
          action: registerBuild
          token: ${{ github.event.client_payload.token }}
-         appname: ${{ github.event.client_payload.user_config.profile_name }}
+         appname: "POC-SBX"
          source_repository: ${{ github.event.client_payload.repository.full_name }}
          check_run_id: ${{ github.run_id }}
          check_run_name: ${{ github.workflow }}
