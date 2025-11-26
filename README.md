@@ -1,5 +1,5 @@
 # 🚨 Deprecation Notice
-# This is changed for US1 Feature/F2611-1 commit2
+# This is changed for US1 Feature/F2611-1 commit3
 # This is changed from main branch itself
 > **This repository is no longer actively maintained.**
 As XM Cloud continues to evolve, we’ve introduced a new starter kit built on the **Content SDK**, which is the strategic foundation for all future XM Cloud development.
@@ -55,6 +55,7 @@ A new starter SPA based on Angular has been introduced with JSS v22.3.0. The Ang
 It is possible to mock a small subset of the XM Cloud Application elements to enable offline development. This can allow for a disconnected development experience, however it is recommend to work in the default connected mode.
 
 You can find more information about how setup the offline development experience [here](./local-containers/README.md)
+
 
 
 
