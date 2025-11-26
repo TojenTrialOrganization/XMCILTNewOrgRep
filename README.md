@@ -1,5 +1,5 @@
 # 🚨 Deprecation Notice
-# This is changed for US1 Feature/F2611-1
+# This is changed for US1 Feature/F2611-1 commit2
 # This is changed from main branch itself
 > **This repository is no longer actively maintained.**
 As XM Cloud continues to evolve, we’ve introduced a new starter kit built on the **Content SDK**, which is the strategic foundation for all future XM Cloud development.
