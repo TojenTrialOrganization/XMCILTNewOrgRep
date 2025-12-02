@@ -1,5 +1,5 @@
 
-name: Release Branch Workflow
+name: Sandbox workflow - Release Branch
 run-name: Veracode Sandbox Scan - ${{ github.event.client_payload.repository.name }}
 
 on:
