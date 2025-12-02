@@ -64,13 +64,16 @@ jobs:
           name: veracode-package
           path: .
 
-      - name: Sandbox Scan (Non-blocking)
-        uses: veracode/veracode-uploadandscan-action@0.2.11
+      - name: Sandbox Scan (Non-blocking on all branches except default/main)
+        uses: veracode/uploadandscan-action@v0.1.9
+        id: upload_and_scan
         with:
-          appname: '${{ secrets.VERACODE_APP_NAME }}'       # Existing profile name
+          appname: '${{ secrets.VERACODE_APP_NAME }}'
           filepath: 'veracode-package.zip'
           vid: '${{ secrets.VERACODE_API_ID }}'
           vkey: '${{ secrets.VERACODE_API_KEY }}'
-          sandboxname: 'ReleaseBranchSandbox'              # Your pre-created sandbox
+          sandboxname: 'ReleaseBranchSandbox'
+          failbuild: ${{ github.event.client_payload.user_config.break_build_policy_findings }}
+          deleteincompletescan: true
           maxretrycount: 10
           scanpollinginterval: 120
