@@ -1,5 +1,5 @@
 # 🚨 Deprecation Notice
-# This is changed for US1 Feature/F0102-1 comment
+# This is changed for US1 Feature/F0102- Need to test whether release branch setting added to veracode.yml takes effect. I it took effect then PR to release branch also should start sanbox scan
 # Testing WF integration 1
 # This is changed from main branch itself
 > **This repository is no longer actively maintained.**
