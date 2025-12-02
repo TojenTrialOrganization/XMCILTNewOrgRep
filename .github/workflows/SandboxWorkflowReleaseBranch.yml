@@ -1,6 +1,5 @@
 
 name: Sandbox workflow - Release Branch
-run-name: Veracode Sandbox Scan - ${{ github.event.repository.name }}.${{ github.ref_name }} Branch
 
 on:
   push:
