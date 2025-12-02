@@ -55,7 +55,7 @@ jobs:
 
   sandbox_scan:
     needs: build
-    name: Veracode Sandbox Scan
+    name: Veracode Sandbox Scan - Release
     runs-on: ubuntu-latest
     steps:
       - name: Download packaged artifact
