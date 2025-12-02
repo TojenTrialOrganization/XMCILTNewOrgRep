@@ -74,7 +74,7 @@ jobs:
           vkey: '${{ secrets.VERACODE_API_KEY }}'
           version: '${{ github.run_id }}'
           sandboxname: 'ReleaseBranchSandbox'
-          failbuild: ${{ github.event.client_payload.user_config.break_build_policy_findings }}
+          failbuild: true
           deleteincompletescan: true
           maxretrycount: 10
           scanpollinginterval: 120
