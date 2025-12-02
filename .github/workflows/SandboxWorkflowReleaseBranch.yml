@@ -1,0 +1,78 @@
+
+name: Sandbox workflow - Release Branch
+run-name: Veracode Sandbox Scan - ${{ github.event.repository.name }}.${{ github.ref_name }} Branch
+
+on:
+  push:
+    branches:
+      - 'Release*'        # Trigger only on branches starting with Release
+  pull_request:
+    branches:
+      - 'Release*'        # Trigger PRs targeting Release* branches
+  workflow_dispatch:       # Allow manual trigger
+
+jobs:
+  build:
+    name: Build and Package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
+      - name: Install dependencies
+        working-directory: ./headapps/nextjs-starter
+        run: pnpm install
+
+      - name: Build Next.js project
+        working-directory: ./headapps/nextjs-starter
+        run: pnpm run build
+
+      - name: Package source code for Veracode
+        run: |
+          mkdir veracode-package
+          rsync -av --progress headapps/nextjs-starter/ veracode-package \
+            --exclude node_modules \
+            --exclude .next \
+            --exclude .git \
+            --exclude .vercel \
+            --exclude coverage \
+            --exclude '*.log'
+          zip -r veracode-package.zip veracode-package
+
+      - name: Upload packaged artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: veracode-package
+          path: veracode-package.zip
+
+  sandbox_scan:
+    needs: build
+    name: Veracode Sandbox Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download packaged artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: veracode-package
+          path: .
+
+      - name: Sandbox Scan (Non-blocking)
+        uses: veracode/veracode-uploadandscan-action@0.2.11
+        with:
+          appname: '${{ secrets.VERACODE_APP_NAME }}'       # Existing profile name
+          filepath: 'veracode-package.zip'
+          vid: '${{ secrets.VERACODE_API_ID }}'
+          vkey: '${{ secrets.VERACODE_API_KEY }}'
+          sandboxname: 'ReleaseBranchSandbox'              # Your pre-created sandbox
+          maxretrycount: 10
+          scanpollinginterval: 120
