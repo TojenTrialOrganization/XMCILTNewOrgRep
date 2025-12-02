@@ -1,6 +1,6 @@
 
 name: Sandbox workflow - Release Branch
-run-name: Veracode Sandbox Scan - ${{ github.event.client_payload.repository.name }}
+run-name: Veracode Sandbox Scan - ${{ github.event.repository.name }}
 
 on:
   push:
@@ -67,7 +67,7 @@ jobs:
           path: .
 
       - name: Sandbox Scan (Non-blocking)
-        uses: veracode/veracode-uploadandscan-action@v0.2.12
+        uses: veracode/veracode-uploadandscan-action@0.2.11
         with:
           appname: '${{ secrets.VERACODE_APP_NAME }}'       # Existing profile name
           filepath: 'veracode-package.zip'
