@@ -1,12 +1,19 @@
-name: Release Branch Worflow
+
+name: Release Branch Workflow
+run-name: Veracode Sandbox Scan - ${{ github.event.client_payload.repository.name }}
+
 on:
   push:
+    branches:
+      - 'Release*'        # Trigger only on branches starting with Release
   pull_request:
-  workflow_dispatch:
+    branches:
+      - 'Release*'        # Trigger PRs targeting Release* branches
+  workflow_dispatch:       # Allow manual trigger
 
 jobs:
   build:
-    name: build
+    name: Build and Package
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -32,27 +39,26 @@ jobs:
 
       - name: Package source code for Veracode
         run: |
-         mkdir veracode-package
-         rsync -av --progress headapps/nextjs-starter/ veracode-package \
-          --exclude node_modules \
-          --exclude .next \
-          --exclude .git \
-          --exclude .vercel \
-          --exclude coverage \
-          --exclude '*.log'
-         zip -r veracode-package.zip veracode-package
+          mkdir veracode-package
+          rsync -av --progress headapps/nextjs-starter/ veracode-package \
+            --exclude node_modules \
+            --exclude .next \
+            --exclude .git \
+            --exclude .vercel \
+            --exclude coverage \
+            --exclude '*.log'
+          zip -r veracode-package.zip veracode-package
 
       - name: Upload packaged artifact
         uses: actions/upload-artifact@v4
         with:
           name: veracode-package
-          path: veracode-package.zip 
+          path: veracode-package.zip
 
   sandbox_scan:
     needs: build
-    name: sandbox_scan
+    name: Veracode Sandbox Scan
     runs-on: ubuntu-latest
-    if: github.ref_name != github.event.repository.default_branch && github.base_ref != github.event.repository.default_branch
     steps:
       - name: Download packaged artifact
         uses: actions/download-artifact@v4
@@ -60,15 +66,13 @@ jobs:
           name: veracode-package
           path: .
 
-      - name: Sandbox Scan (Non-blocking on all branches except default/main)
-        uses: veracode/veracode-uploadandscan-action@0.2.11
+      - name: Sandbox Scan (Non-blocking)
+        uses: veracode/veracode-uploadandscan-action@v0.2.12
         with:
-          appname: '${{ secrets.VERACODE_APP_NAME }}'
+          appname: '${{ secrets.VERACODE_APP_NAME }}'       # Existing profile name
           filepath: 'veracode-package.zip'
           vid: '${{ secrets.VERACODE_API_ID }}'
           vkey: '${{ secrets.VERACODE_API_KEY }}'
-          sandboxname: 'ReleaseBranchSandbox'
+          sandboxname: 'ReleaseBranchSandbox'              # Your pre-created sandbox
           maxretrycount: 10
           scanpollinginterval: 120
-          
-  
