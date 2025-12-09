@@ -1,6 +1,4 @@
-
 name: Sandbox workflow - Release Branch
-run-name: Veracode Sandbox Scan - ${{ github.event.repository.name }}.${{ github.ref_name }} Branch
 
 on:
   push:
@@ -57,7 +55,7 @@ jobs:
 
   sandbox_scan:
     needs: build
-    name: Veracode Sandbox Scan
+    name: Veracode Sandbox Scan - Release
     runs-on: ubuntu-latest
     steps:
       - name: Download packaged artifact
@@ -66,13 +64,17 @@ jobs:
           name: veracode-package
           path: .
 
-      - name: Sandbox Scan (Non-blocking)
-        uses: veracode/veracode-uploadandscan-action@0.2.11
+      - name: Sandbox Scan (Non-blocking on all branches except default/main)
+        uses: veracode/uploadandscan-action@v0.1.9
+        id: upload_and_scan
         with:
-          appname: '${{ secrets.VERACODE_APP_NAME }}'       # Existing profile name
+          appname: '${{ secrets.VERACODE_APP_NAME }}'
           filepath: 'veracode-package.zip'
           vid: '${{ secrets.VERACODE_API_ID }}'
           vkey: '${{ secrets.VERACODE_API_KEY }}'
-          sandboxname: 'ReleaseBranchSandbox'              # Your pre-created sandbox
+          version: '${{ github.run_id }}'
+          sandboxname: 'ReleaseBranchSandbox'
+          failbuild: true
+          deleteincompletescan: true
           maxretrycount: 10
           scanpollinginterval: 120
