@@ -1,7 +1,7 @@
 # Sitecore Content SDK Next.js Sample Application
 
 <!---
-@TODO: Update link with appropriate page when avaiable
+@TODO: Update link with appropriate page when avaiable 1218-01
 -->
 
 [Documentation](https://doc.sitecore.com/xmc/en/developers/xm-cloud/sitecore-javascript-rendering-sdk--jss--for-next-js.html)
